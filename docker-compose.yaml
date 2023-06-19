@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  php:
+    container_name: php
+    build:
+      context: ./docker/php/
+    volumes:
+      - "./src:/var/www/html"
+    ports:
+      - "80:80"
+
+  db:
+    image: mysql:latest
+    container_name: mysql
+    environment:
+      - MYSQL_DATABASE=test
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./docker/db:/docker-entrypoint-initdb.d"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - "8001:80"
+    environment:
+      - PMA_HOST=db
+      - PMA_PORT=3306
+
+
